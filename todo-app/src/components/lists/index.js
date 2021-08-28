@@ -28,7 +28,7 @@ export default function Lists() {
   const classes = useStyles();
   const [hook] = useDataHook();
 
-  const [lists, setLists] = React.useState([new TodoList("Erste Liste", null)]);
+  const [lists, setLists] = React.useState([]);
   const [listName, setListName] = React.useState("");
 
   const addList = (name) => {
@@ -47,7 +47,12 @@ export default function Lists() {
           onChange={(event) => setListName(event.target.value)}
           endAdornment={
             <InputAdornment position="end">
-              <IconButton onClick={() => addList(listName)}>
+              <IconButton
+                onClick={() => {
+                  addList(listName);
+                  setListName("");
+                }}
+              >
                 <AddCircleOutline />
               </IconButton>
             </InputAdornment>
@@ -55,15 +60,15 @@ export default function Lists() {
         />
       </FormControl>
       <List>
-        {lists &&
-          lists.map((list) => (
-            <ListItem key={list.getName(hook)}>
-              <ListItemText
-                primary={list.getName(hook)}
-                secondary={`${list.getItems(hook).length} ${strings.tasks_to_do}`}
-              />
-            </ListItem>
-          ))}
+        {lists.length === 0 && <div>{strings.no_list}</div>}
+        {lists?.map((list) => (
+          <ListItem key={list.getName(hook)}>
+            <ListItemText
+              primary={list.getName(hook)}
+              secondary={`${list.getItems(hook).length} ${strings.tasks_to_do}`}
+            />
+          </ListItem>
+        ))}
       </List>
     </div>
   );
