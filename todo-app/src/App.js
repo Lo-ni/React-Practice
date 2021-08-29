@@ -1,15 +1,11 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
-import Lists from './components/lists';
+import React from "react";
+import "./App.css";
+import Lists from "./components/lists";
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Lists />
-      </header>
+      <Lists />
     </div>
   );
 }
