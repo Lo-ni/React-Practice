@@ -42,8 +42,7 @@ export default function Lists() {
                 secondary={`${list.getItems(hook).length} ${
                   strings.tasks_to_do
                 }`}
-                data={list}
-                deleteAction={removeList}
+                onDelete={() => removeList(list)}
               />
               <Route path={`/todos/${list.getName(hook)}`}>
                 <Todos list={list} />
