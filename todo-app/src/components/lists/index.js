@@ -22,20 +22,8 @@ export default function Lists() {
     setLists([...lists].filter((item) => item !== list));
   };
 
-  const setList = (list, index) => {
-    const newLists = [...lists];
-    newLists[index] = list;
-    setLists(newLists);
-  };
-
-  const routeNames = lists.map((list) => `/todos/${list.getName(hook)}`);
-  routeNames.push("/lists");
-
   return (
-    <MemoryRouter
-      initialEntries={routeNames}
-      initialIndex={routeNames.length - 1}
-    >
+    <MemoryRouter>
       <div>
         <CustomInput
           placeholder={strings.new_todo_list}
@@ -46,7 +34,7 @@ export default function Lists() {
 
         {lists.length === 0 && <div>{strings.no_list}</div>}
         <List>
-          {lists?.map((list, index) => (
+          {lists?.map((list) => (
             <div key={list.getName(hook)}>
               <ListItemLink
                 to={`/todos/${list.getName(hook)}`}
@@ -58,7 +46,7 @@ export default function Lists() {
                 deleteAction={removeList}
               />
               <Route path={`/todos/${list.getName(hook)}`}>
-                <Todos list={list} setList={(list) => setList(list, index)} />
+                <Todos list={list} />
               </Route>
             </div>
           ))}

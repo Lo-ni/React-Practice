@@ -18,58 +18,47 @@ import TodoItem from "../../models/TodoItem";
 function Todos(props) {
   const [hook] = useDataHook();
   const [todoName, setTodoName] = React.useState("");
+  const items = [...props.list?.getItems(hook)];
 
   const addTodo = () => {
-    let newTodos = [...props.list?.getItems(hook)];
-    newTodos.push(new TodoItem(todoName));
-    const newList = props.list;
-    newList.setItems(newTodos);
-    props.setList(newList);
+    items.push(new TodoItem(todoName));
+    props.list.setItems(items);
     setTodoName("");
   };
 
   const removeTodo = (todo) => {
-    const newList = props.list;
-    newList.setItems(
-      [...props.list?.getItems(hook)].filter((item) => item !== todo)
-    );
-    props.setList(newList);
+    props.list.setItems(items.filter((item) => item !== todo));
   };
 
   return (
     <MemoryRouter>
-      <div>
-        <CustomInput
-          placeholder={strings.new_todo}
-          value={todoName}
-          onChangeValue={setTodoName}
-          onClickButton={addTodo}
-        />
+      <CustomInput
+        placeholder={strings.new_todo}
+        value={todoName}
+        onChangeValue={setTodoName}
+        onClickButton={addTodo}
+      />
 
-        {props.list?.getItems(hook)?.length === 0 && (
-          <div>{strings.no_list}</div>
-        )}
-        <List>
-          {props.list?.getItems(hook)?.length > 0 &&
-            props.list?.getItems(hook)?.map((item) => (
-              <ListItem key={item.getName(hook)}>
-                <ListItemText primary={item.getName(hook)} />
-                <ListItemSecondaryAction onClick={() => removeTodo(item)}>
-                  <IconButton edge="end">
-                    <DeleteOutline />
-                  </IconButton>
-                </ListItemSecondaryAction>
-              </ListItem>
-            ))}
-        </List>
-      </div>
+      {items?.length === 0 && <div>{strings.no_list}</div>}
+      <List>
+        {items?.length > 0 &&
+          items?.map((item) => (
+            <ListItem key={item.getName(hook)}>
+              <ListItemText primary={item.getName(hook)} />
+              <ListItemSecondaryAction onClick={() => removeTodo(item)}>
+                <IconButton edge="end">
+                  <DeleteOutline />
+                </IconButton>
+              </ListItemSecondaryAction>
+            </ListItem>
+          ))}
+      </List>
     </MemoryRouter>
   );
 }
 
 Todos.propTypes = {
-  list: PropTypes.objectOf(TodoList),
-  setList: PropTypes.func,
+  list: PropTypes.objectOf(TodoList).isRequired,
 };
 
 export default Todos;
