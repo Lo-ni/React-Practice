@@ -14,7 +14,7 @@ export default function Lists() {
   const [listName, setListName] = React.useState("");
 
   const addList = () => {
-    setLists([...lists, new TodoList(listName)]);
+    setLists([...lists, new TodoList(listName, [])]);
     setListName("");
   };
 
@@ -22,8 +22,10 @@ export default function Lists() {
     setLists([...lists].filter((item) => item !== list));
   };
 
-  const setTodos = (list, todos) => {
-    console.log(list, todos);
+  const setList = (list, index) => {
+    const newLists = [...lists];
+    newLists[index] = list;
+    setLists(newLists);
   };
 
   const routeNames = lists.map((list) => `/todos/${list.getName(hook)}`);
@@ -44,7 +46,7 @@ export default function Lists() {
 
         {lists.length === 0 && <div>{strings.no_list}</div>}
         <List>
-          {lists?.map((list) => (
+          {lists?.map((list, index) => (
             <div key={list.getName(hook)}>
               <ListItemLink
                 to={`/todos/${list.getName(hook)}`}
@@ -56,10 +58,7 @@ export default function Lists() {
                 deleteAction={removeList}
               />
               <Route path={`/todos/${list.getName(hook)}`}>
-                <Todos
-                  list={list}
-                  setTodos={(todos) => setTodos(list, todos)}
-                />
+                <Todos list={list} setList={(list) => setList(list, index)} />
               </Route>
             </div>
           ))}

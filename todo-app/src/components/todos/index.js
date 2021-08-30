@@ -18,17 +18,22 @@ import TodoItem from "../../models/TodoItem";
 function Todos(props) {
   const [hook] = useDataHook();
   const [todoName, setTodoName] = React.useState("");
-  const [todos, setTodos] = React.useState(props.list?.items);
 
   const addTodo = () => {
-    setTodos([...todos, new TodoItem(todoName)]);
-    props.setTodos(todos);
+    let newTodos = [...props.list?.getItems(hook)];
+    newTodos.push(new TodoItem(todoName));
+    const newList = props.list;
+    newList.setItems(newTodos);
+    props.setList(newList);
     setTodoName("");
   };
 
   const removeTodo = (todo) => {
-    setTodos([...todos].filter((item) => item !== todo));
-    props.setTodos(todos);
+    const newList = props.list;
+    newList.setItems(
+      [...props.list?.getItems(hook)].filter((item) => item !== todo)
+    );
+    props.setList(newList);
   };
 
   return (
@@ -41,10 +46,12 @@ function Todos(props) {
           onClickButton={addTodo}
         />
 
-        {props.list?.items?.length === 0 && <div>{strings.no_list}</div>}
+        {props.list?.getItems(hook)?.length === 0 && (
+          <div>{strings.no_list}</div>
+        )}
         <List>
-          {props.list?.items?.length > 0 &&
-            props.list?.items?.map((item) => (
+          {props.list?.getItems(hook)?.length > 0 &&
+            props.list?.getItems(hook)?.map((item) => (
               <ListItem key={item.getName(hook)}>
                 <ListItemText primary={item.getName(hook)} />
                 <ListItemSecondaryAction onClick={() => removeTodo(item)}>
@@ -62,7 +69,7 @@ function Todos(props) {
 
 Todos.propTypes = {
   list: PropTypes.objectOf(TodoList),
-  setTodos: PropTypes.func,
+  setList: PropTypes.func,
 };
 
 export default Todos;
