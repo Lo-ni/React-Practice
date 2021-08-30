@@ -1,12 +1,15 @@
 import React from "react";
+import { MemoryRouter } from "react-router-dom";
 import "./App.css";
 import Lists from "./components/lists";
 
 function App() {
   return (
-    <div className="App">
-      <Lists />
-    </div>
+    <MemoryRouter initialEntries={["/lists", "/todos"]} initialIndex={0}>
+      <div className="App">
+        <Lists />
+      </div>
+    </MemoryRouter>
   );
 }
 
