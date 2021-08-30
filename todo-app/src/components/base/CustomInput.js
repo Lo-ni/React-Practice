@@ -26,10 +26,10 @@ function CustomInput(props) {
   return (
     <FormControl className={classes.input}>
       <InputLabel className={classes.inputLabel}>
-        {strings.new_todo_list}
+        {props.placeholder ?? strings.add}
       </InputLabel>
       <OutlinedInput
-        label={strings.new_todo_list}
+        label={props.placeholder ?? strings.add}
         value={props.value}
         onChange={(event) => props.onChangeValue(event.target.value)}
         endAdornment={
@@ -45,6 +45,7 @@ function CustomInput(props) {
 }
 
 CustomInput.propTypes = {
+  placeholder: PropTypes.string,
   value: PropTypes.string.isRequired,
   onChangeValue: PropTypes.func.isRequired,
   onClickButton: PropTypes.func,

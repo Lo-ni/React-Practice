@@ -22,6 +22,7 @@ export default function Lists() {
   return (
     <div>
       <CustomInput
+        placeholder={strings.new_todo_list}
         value={listName}
         onChangeValue={setListName}
         onClickButton={() => {
