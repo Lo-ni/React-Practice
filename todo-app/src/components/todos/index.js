@@ -15,8 +15,10 @@ function Todos(props) {
   const items = [...props.list?.getItems(hook)];
 
   const addTodo = () => {
-    items.push(new TodoItem(todoName));
-    props.list.setItems(items);
+    if (todoName) {
+      items.push(new TodoItem(todoName));
+      props.list.setItems(items);
+    }
     setTodoName("");
   };
 

@@ -14,7 +14,9 @@ export default function Lists() {
   const [listName, setListName] = React.useState("");
 
   const addList = () => {
-    setLists([...lists, new TodoList(listName, [])]);
+    if (listName) {
+      setLists([...lists, new TodoList(listName, [])]);
+    }
     setListName("");
   };
 
