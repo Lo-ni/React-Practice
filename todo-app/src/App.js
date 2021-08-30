@@ -1,13 +1,13 @@
 import React from "react";
-import { MemoryRouter } from "react-router-dom";
+import { MemoryRouter, Route } from "react-router-dom";
 import "./App.css";
 import Lists from "./components/lists";
 
 function App() {
   return (
-    <MemoryRouter initialEntries={["/lists", "/todos"]} initialIndex={0}>
+    <MemoryRouter initialEntries={["/lists"]}>
       <div className="App">
-        <Lists />
+        <Route path={"/lists"} component={Lists} />
       </div>
     </MemoryRouter>
   );

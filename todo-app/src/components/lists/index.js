@@ -5,45 +5,66 @@ import { useDataHook } from "model-react";
 import TodoList from "../../models/TodoList";
 import CustomInput from "../base/CustomInput";
 import ListItemLink from "../base/ListItemLink";
+import { Route, MemoryRouter } from "react-router-dom";
+import Todos from "../todos";
 
 export default function Lists() {
   const [hook] = useDataHook();
   const [lists, setLists] = React.useState([]);
   const [listName, setListName] = React.useState("");
 
-  const addList = (name) => {
-    setLists([...lists, new TodoList(name)]);
+  const addList = () => {
+    setLists([...lists, new TodoList(listName)]);
+    setListName("");
   };
 
   const removeList = (list) => {
     setLists([...lists].filter((item) => item !== list));
   };
 
-  return (
-    <div>
-      <CustomInput
-        placeholder={strings.new_todo_list}
-        value={listName}
-        onChangeValue={setListName}
-        onClickButton={() => {
-          addList(listName);
-          setListName("");
-        }}
-      />
+  const setTodos = (list, todos) => {
+    console.log(list, todos);
+  };
 
-      {lists.length === 0 && <div>{strings.no_list}</div>}
-      <List>
-        {lists?.map((list) => (
-          <ListItemLink
-            key={list.getName(hook)}
-            to={`/todos/${list.getName(hook)}`}
-            primary={list.getName(hook)}
-            secondary={`${list.getItems(hook).length} ${strings.tasks_to_do}`}
-            data={list}
-            deleteAction={removeList}
-          />
-        ))}
-      </List>
-    </div>
+  const routeNames = lists.map((list) => `/todos/${list.getName(hook)}`);
+  routeNames.push("/lists");
+
+  return (
+    <MemoryRouter
+      initialEntries={routeNames}
+      initialIndex={routeNames.length - 1}
+    >
+      <div>
+        <CustomInput
+          placeholder={strings.new_todo_list}
+          value={listName}
+          onChangeValue={setListName}
+          onClickButton={addList}
+        />
+
+        {lists.length === 0 && <div>{strings.no_list}</div>}
+        <List>
+          {lists?.map((list) => (
+            <div key={list.getName(hook)}>
+              <ListItemLink
+                to={`/todos/${list.getName(hook)}`}
+                primary={list.getName(hook)}
+                secondary={`${list.getItems(hook).length} ${
+                  strings.tasks_to_do
+                }`}
+                data={list}
+                deleteAction={removeList}
+              />
+              <Route path={`/todos/${list.getName(hook)}`}>
+                <Todos
+                  list={list}
+                  setTodos={(todos) => setTodos(list, todos)}
+                />
+              </Route>
+            </div>
+          ))}
+        </List>
+      </div>
+    </MemoryRouter>
   );
 }
