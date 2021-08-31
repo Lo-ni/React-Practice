@@ -55,12 +55,12 @@ function ListItemLink(props) {
 
 ListItemLink.propTypes = {
   primary: PropTypes.string.isRequired,
-  secondary: PropTypes.string.isRequired,
-  to: PropTypes.string.isRequired,
+  secondary: PropTypes.string,
+  to: PropTypes.string,
   disabled: PropTypes.bool,
   isFinished: PropTypes.bool,
-  onEdit: PropTypes.func,
-  onDelete: PropTypes.func,
+  onEdit: PropTypes.func.isRequired,
+  onDelete: PropTypes.func.isRequired,
   onClick: PropTypes.func,
 };
 
