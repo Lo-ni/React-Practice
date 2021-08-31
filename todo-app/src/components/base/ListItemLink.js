@@ -8,7 +8,7 @@ import {
   ListItemSecondaryAction,
   makeStyles,
 } from "@material-ui/core";
-import { DeleteOutline } from "@material-ui/icons";
+import { DeleteOutline, Edit } from "@material-ui/icons";
 
 const useStyles = makeStyles(() => ({
   crossedOut: {
@@ -17,33 +17,38 @@ const useStyles = makeStyles(() => ({
 }));
 
 function ListItemLink(props) {
-  const { primary, secondary, to, onDelete, onClick, isFinished } = props;
   const history = useHistory();
   const classes = useStyles();
 
   return (
     <ListItem
       button
+      disabled={props.disabled}
       onClick={() => {
-        if (to && !onClick) {
-          history.push(to);
+        if (props.to && !props.onClick) {
+          history.push(props.to);
         } else {
-          onClick();
+          props.onClick();
         }
       }}
     >
       <ListItemText
-        primary={primary}
-        secondary={secondary}
-        className={isFinished ? classes.crossedOut : null}
+        primary={props.primary}
+        secondary={props.secondary}
+        className={props.isFinished ? classes.crossedOut : null}
       />
-      {onDelete && (
-        <ListItemSecondaryAction onClick={onDelete}>
-          <IconButton edge="end">
+      <ListItemSecondaryAction>
+        {props.onEdit && (
+          <IconButton onClick={props.onEdit}>
+            <Edit />
+          </IconButton>
+        )}
+        {props.onDelete && (
+          <IconButton edge="end" onClick={props.onDelete}>
             <DeleteOutline />
           </IconButton>
-        </ListItemSecondaryAction>
-      )}
+        )}
+      </ListItemSecondaryAction>
     </ListItem>
   );
 }
@@ -52,9 +57,11 @@ ListItemLink.propTypes = {
   primary: PropTypes.string.isRequired,
   secondary: PropTypes.string.isRequired,
   to: PropTypes.string.isRequired,
+  disabled: PropTypes.bool,
+  isFinished: PropTypes.bool,
+  onEdit: PropTypes.func,
   onDelete: PropTypes.func,
   onClick: PropTypes.func,
-  isFinished: PropTypes.bool,
 };
 
 export default ListItemLink;

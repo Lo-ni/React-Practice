@@ -8,7 +8,7 @@ import {
   InputAdornment,
   IconButton,
 } from "@material-ui/core";
-import { AddCircleOutline } from "@material-ui/icons";
+import { Add } from "@material-ui/icons";
 import strings from "../../resources/strings";
 
 const useStyles = makeStyles((theme) => ({
@@ -35,7 +35,7 @@ function CustomInput(props) {
         endAdornment={
           <InputAdornment position="end">
             <IconButton onClick={props.onClickButton}>
-              <AddCircleOutline />
+              {props.icon ?? <Add />}
             </IconButton>
           </InputAdornment>
         }
@@ -49,6 +49,7 @@ CustomInput.propTypes = {
   value: PropTypes.string.isRequired,
   onChangeValue: PropTypes.func.isRequired,
   onClickButton: PropTypes.func,
+  icon: PropTypes.object,
 };
 
 export default CustomInput;
