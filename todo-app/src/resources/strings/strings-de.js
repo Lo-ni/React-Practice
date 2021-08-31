@@ -6,6 +6,7 @@ const stringsDe = {
   tasks_to_do: "Aufgaben zu erledigen",
   new_todo: "Neue Aufgabe hinzufügen",
   edit_todo: "Aufgabe bearbeiten",
+  no_todos: "Keine Aufgaben verfügbar",
   add: "Hinzufügen",
 };
 
