@@ -8,10 +8,12 @@ import TodoList from "../../models/TodoList";
 import { MemoryRouter } from "react-router-dom";
 import TodoItem from "../../models/TodoItem";
 import ListItemLink from "../base/ListItemLink";
+import { Done } from "@material-ui/icons";
 
 function Todos(props) {
   const [hook] = useDataHook();
   const [todoName, setTodoName] = React.useState("");
+  const [editItem, setEditItem] = React.useState(null);
   const items = [...props.list?.getItems(hook)];
 
   const addTodo = () => {
@@ -30,27 +32,55 @@ function Todos(props) {
     todo.setFinished(!todo.isFinished(hook));
   };
 
+  const editTodo = (todo) => {
+    if (todoName) {
+      todo.setName(todoName);
+      setTodoName("");
+      setEditItem(null);
+    }
+  };
+
+  const editMode = (todo) => {
+    setEditItem(todo);
+    setTodoName(todo.getName(hook));
+  };
+
   return (
     <MemoryRouter>
-      <CustomInput
-        placeholder={strings.new_todo}
-        value={todoName}
-        onChangeValue={setTodoName}
-        onClickButton={addTodo}
-      />
+      {!editItem && (
+        <CustomInput
+          placeholder={strings.new_todo}
+          value={todoName}
+          onChangeValue={setTodoName}
+          onClickButton={addTodo}
+        />
+      )}
 
       {items?.length === 0 && <div>{strings.no_list}</div>}
       <List>
-        {items?.length > 0 &&
-          items?.map((item) => (
-            <ListItemLink
-              key={item.getName(hook)}
-              primary={item.getName(hook)}
-              onDelete={() => removeTodo(item)}
-              onClick={() => finishTodo(item)}
-              isFinished={item.isFinished(hook)}
-            />
-          ))}
+        {items?.map((item) => (
+          <div key={item.getName(hook)}>
+            {item === editItem && (
+              <CustomInput
+                placeholder={strings.new_todo}
+                value={todoName}
+                onChangeValue={setTodoName}
+                onClickButton={() => editTodo(item)}
+                icon={<Done />}
+              />
+            )}
+            {item !== editItem && (
+              <ListItemLink
+                primary={item.getName(hook)}
+                onDelete={() => removeTodo(item)}
+                onEdit={() => editMode(item)}
+                onClick={() => finishTodo(item)}
+                isFinished={item.isFinished(hook)}
+                disabled={editItem}
+              />
+            )}
+          </div>
+        ))}
       </List>
     </MemoryRouter>
   );
