@@ -6,10 +6,8 @@ import strings from "../../resources/strings";
 import { MemoryRouter } from "react-router-dom";
 import CustomInput from "./CustomInput";
 import ListItemLink from "./ListItemLink";
-import { useDataHook } from "model-react";
 
 function ListView(props) {
-  const [hook] = useDataHook();
   const [itemName, setItemName] = React.useState("");
   const [editableItem, setEditableItem] = React.useState(null);
 
@@ -30,7 +28,7 @@ function ListView(props) {
 
   const switchEditMode = (item) => {
     setEditableItem(item);
-    setItemName(item.getName(hook));
+    setItemName(props.primaryText(item));
   };
 
   return (
