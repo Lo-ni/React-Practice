@@ -11,12 +11,9 @@ import {
 import { Add } from "@material-ui/icons";
 import strings from "../../resources/strings";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   inputLabel: {
     marginLeft: 16,
-  },
-  input: {
-    margin: theme.spacing(2),
   },
 }));
 
@@ -24,7 +21,7 @@ function CustomInput(props) {
   const classes = useStyles();
 
   return (
-    <FormControl className={classes.input}>
+    <FormControl fullWidth={true}>
       <InputLabel className={classes.inputLabel}>
         {props.placeholder ?? strings.add}
       </InputLabel>

@@ -1,15 +1,20 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { List } from "@material-ui/core";
+import { Box, Divider, List, makeStyles } from "@material-ui/core";
 import { Done } from "@material-ui/icons";
 import strings from "../../resources/strings";
 import { MemoryRouter } from "react-router-dom";
 import CustomInput from "./CustomInput";
 import ListItemLink from "./ListItemLink";
-import { useDataHook } from "model-react";
+
+const useStyles = makeStyles(() => ({
+  empty: {
+    marginTop: 16,
+  },
+}));
 
 function ListView(props) {
-  const [hook] = useDataHook();
+  const classes = useStyles();
   const [itemName, setItemName] = React.useState("");
   const [editableItem, setEditableItem] = React.useState(null);
 
@@ -30,57 +35,64 @@ function ListView(props) {
 
   const switchEditMode = (item) => {
     setEditableItem(item);
-    setItemName(item.getName(hook));
+    setItemName(props.primaryText(item));
   };
 
   return (
     <MemoryRouter>
-      {!editableItem && (
-        <CustomInput
-          placeholder={props.placeholderNewItem ?? strings.add}
-          value={itemName}
-          onChangeValue={setItemName}
-          onClickButton={addItem}
-        />
-      )}
+      <Box minWidth={300} maxWidth={1} width={1 / 2}>
+        {!editableItem && (
+          <CustomInput
+            placeholder={props.placeholderNewItem ?? strings.add}
+            value={itemName}
+            onChangeValue={setItemName}
+            onClickButton={addItem}
+          />
+        )}
 
-      {props.items?.length === 0 && (
-        <div>{props.emptyList ?? strings.no_list}</div>
-      )}
-      <List>
-        {props.items?.map((item, index) => (
-          <div key={`item_${index}`}>
-            {item === editableItem && (
-              <CustomInput
-                placeholder={props.placeholderEditItem ?? strings.add}
-                value={itemName}
-                onChangeValue={setItemName}
-                onClickButton={() => editItem(item)}
-                icon={<Done />}
-              />
-            )}
-            {item !== editableItem && (
-              <div>
-                <ListItemLink
-                  to={props.toPath ? props.toPath(item) : null}
-                  primary={props.primaryText(item)}
-                  secondary={
-                    props.secondaryText ? props.secondaryText(item) : null
-                  }
-                  onDelete={() => props.deleteItem(item)}
-                  onEdit={() => switchEditMode(item)}
-                  onClick={props.itemClick ? () => props.itemClick(item) : null}
-                  disabled={editableItem}
-                  isFinished={
-                    props.itemIsFinished ? props.itemIsFinished(item) : false
-                  }
-                />
-                {props.route && props.route(item)}
-              </div>
-            )}
+        {props.items?.length === 0 && (
+          <div className={classes.empty}>
+            {props.emptyList ?? strings.no_list}
           </div>
-        ))}
-      </List>
+        )}
+        <List>
+          {props.items?.map((item, index) => (
+            <div key={`item_${index}`}>
+              {item === editableItem && (
+                <CustomInput
+                  placeholder={props.placeholderEditItem ?? strings.add}
+                  value={itemName}
+                  onChangeValue={setItemName}
+                  onClickButton={() => editItem(item)}
+                  icon={<Done />}
+                />
+              )}
+              {item !== editableItem && (
+                <div>
+                  <ListItemLink
+                    to={props.toPath ? props.toPath(item) : null}
+                    primary={props.primaryText(item)}
+                    secondary={
+                      props.secondaryText ? props.secondaryText(item) : null
+                    }
+                    onDelete={() => props.deleteItem(item)}
+                    onEdit={() => switchEditMode(item)}
+                    onClick={
+                      props.itemClick ? () => props.itemClick(item) : null
+                    }
+                    disabled={editableItem}
+                    isFinished={
+                      props.itemIsFinished ? props.itemIsFinished(item) : false
+                    }
+                  />
+                  {index !== props.items?.length - 1 && <Divider light />}
+                  {props.route && props.route(item)}
+                </div>
+              )}
+            </div>
+          ))}
+        </List>
+      </Box>
     </MemoryRouter>
   );
 }

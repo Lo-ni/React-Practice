@@ -5,6 +5,7 @@ import { useDataHook } from "model-react";
 import TodoList from "../../models/TodoList";
 import TodoItem from "../../models/TodoItem";
 import ListView from "../base/ListView";
+import { Box } from "@material-ui/core";
 
 function Todos(props) {
   const [hook] = useDataHook();
@@ -28,17 +29,20 @@ function Todos(props) {
   };
 
   return (
-    <ListView
-      placeholderNewItem={strings.new_todo}
-      placeholderEditItem={strings.edit_todo}
-      addItem={addTodo}
-      items={todos}
-      primaryText={(todo) => todo.getName(hook)}
-      deleteItem={removeTodo}
-      editItem={editTodo}
-      itemClick={finishTodo}
-      itemIsFinished={(item) => item.isFinished(hook)}
-    />
+    <Box marginBottom={3} marginTop={1}>
+      <ListView
+        placeholderNewItem={strings.new_todo}
+        placeholderEditItem={strings.edit_todo}
+        emptyList={strings.no_todos}
+        addItem={addTodo}
+        items={todos}
+        primaryText={(todo) => todo.getName(hook)}
+        deleteItem={removeTodo}
+        editItem={editTodo}
+        itemClick={finishTodo}
+        itemIsFinished={(item) => item.isFinished(hook)}
+      />
+    </Box>
   );
 }
 

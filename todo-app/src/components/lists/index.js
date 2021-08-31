@@ -5,6 +5,7 @@ import TodoList from "../../models/TodoList";
 import { Route } from "react-router-dom";
 import Todos from "../todos";
 import ListView from "../base/ListView";
+import { Box } from "@material-ui/core";
 
 export default function Lists() {
   const [hook] = useDataHook();
@@ -31,19 +32,24 @@ export default function Lists() {
   };
 
   return (
-    <ListView
-      placeholderNewItem={strings.new_todo_list}
-      placeholderEditItem={strings.edit_todo_list}
-      addItem={addList}
-      items={lists}
-      toPath={(list) => `/todos/${list.getName(hook)}`}
-      primaryText={(list) => list.getName(hook)}
-      secondaryText={(list) =>
-        `${list.getItems(hook).length} ${strings.tasks_to_do}`
-      }
-      deleteItem={removeList}
-      editItem={editList}
-      route={getRoute}
-    />
+    <Box marginTop={2}>
+      <ListView
+        placeholderNewItem={strings.new_todo_list}
+        placeholderEditItem={strings.edit_todo_list}
+        emptyList={strings.no_list}
+        addItem={addList}
+        items={lists}
+        toPath={(list) => `/todos/${list.getName(hook)}`}
+        primaryText={(list) => list.getName(hook)}
+        secondaryText={(list) =>
+          `${
+            list.getItems(hook).filter((item) => !item.isFinished(hook)).length
+          } ${strings.tasks_to_do}`
+        }
+        deleteItem={removeList}
+        editItem={editList}
+        route={getRoute}
+      />
+    </Box>
   );
 }
