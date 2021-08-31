@@ -39,7 +39,9 @@ export default function Lists() {
       toPath={(list) => `/todos/${list.getName(hook)}`}
       primaryText={(list) => list.getName(hook)}
       secondaryText={(list) =>
-        `${list.getItems(hook).length} ${strings.tasks_to_do}`
+        `${
+          list.getItems(hook).filter((item) => !item.isFinished(hook)).length
+        } ${strings.tasks_to_do}`
       }
       deleteItem={removeList}
       editItem={editList}
